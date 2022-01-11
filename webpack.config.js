@@ -20,16 +20,26 @@ const projName = PACKAGE.name;
 
 const siteData = multiJsonLoader.loadFiles('./src/_data');
 
-let runMod = "development";
+let runMod = 'development';
 
-if (process.argv.indexOf('--dev') === -1) {
-  runMod = 'production';
-  process.env.NODE_ENV = 'production';
-  console.log('Running production build......');
-  console.log('Assets will be created at ', assetPath);
+if (process.argv.indexOf('development') === -1) {
+  if (process.argv.indexOf('production') === -1) {
+    runMod = 'staging';
+    process.env.NODE_ENV = 'staging';
+    console.log(process.argv);
+    console.log('Running staging build......');
+    console.log('Assets will be created at ', assetPath);
+  } else {
+    runMod = 'production';
+    process.env.NODE_ENV = 'production';
+    console.log(process.argv);
+    console.log('Running production build......');
+    console.log('Assets will be created at ', assetPath);
+  }
 } else {
   runMod = 'development';
   process.env.NODE_ENV = 'development';
+  console.log(process.argv);
   console.log('Running development build......');
   console.log('Assets will be created at ', assetPath);
 }
@@ -178,12 +188,10 @@ function generateModRules(envMode) {
     }
   ]
 
-  if (envMode === 'production') {
-    if (process.argv.indexOf('--prod') === -1) {
-      return stgModRules;
-    } else {
-      return prodModRules;
-    }
+  if (envMode === 'staging') {
+    return stgModRules;
+  } else if (envMode === 'production') {
+    return prodModRules;
   } else {
     return devModRules;
   }
@@ -243,12 +251,10 @@ function generateDist (envMode) {
   const prodPath = "";
   const stgPath = `/${projName}`;
 
-  if (envMode === 'production') {
-    if (process.argv.indexOf('--prod') === -1) {
-      return stgPath;
-    } else {
-      return prodPath;
-    }
+  if (envMode === 'staging') {
+    return stgPath;
+  } else if (envMode === 'production') {
+    return prodPath;
   } else {
     return devPath;
   }
@@ -259,12 +265,10 @@ function generateEnv (envMode) {
   const prodEnv = "prod";
   const stgEnv = "stg";
 
-  if (envMode === 'production') {
-    if (process.argv.indexOf('--prod') === -1) {
-      return stgEnv;
-    } else {
-      return prodEnv;
-    }
+  if (envMode === 'staging') {
+    return stgEnv;
+  } else if (envMode === 'production') {
+    return prodEnv;
   } else {
     return devEnv;
   }
@@ -307,12 +311,21 @@ module.exports = smp.wrap({
     })
   ].concat(htmlPlugins, buildPlugins),
   devServer: {
-    contentBase: path.resolve(__dirname, 'dist' + distRules),
-    watchContentBase: true,
-    publicPath: '/',
+    static: {
+      directory: path.resolve(__dirname, 'dist' + distRules),
+      publicPath: '/',
+      watch: true,
+    },
     hot:false,
-    inline: true,
     port: 3000
+  },
+  resolve: {
+    modules: [
+      "node_modules"
+    ],
+    alias: {
+
+    }
   },
   resolve: {
     modules: [

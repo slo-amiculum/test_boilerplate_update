@@ -5,9 +5,9 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"build": "webpack --prod --config webpack.config.js",
-		"stage": "webpack --stg --config webpack.config.js",
-		"dev": "webpack-dev-server --dev --config webpack.config.js"
+		"build": "webpack --mode production --config webpack.config.js",
+		"stage": "webpack --mode none --config webpack.config.js",
+		"dev": "webpack-dev-server --mode development --config webpack.config.js"
 	},
 	"author": "Author&#39;s Name",
 	"license": "MIT",
@@ -57,8 +57,8 @@
 		"style-loader": "^0.21.0",
 		"tailwindcss": "^1.9.6",
 		"uglifyjs-webpack-plugin": "^1.0.0-rc.0",
-		"webpack": "^4.16.2",
-		"webpack-cli": "^3.1.0",
-		"webpack-dev-server": "^3.1.5"
+		"webpack": "^4.46.0",
+		"webpack-cli": "^4.9.1",
+		"webpack-dev-server": "^4.6.0"
 	}
 }
