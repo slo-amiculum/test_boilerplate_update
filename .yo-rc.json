@@ -1,0 +1,9 @@
+{
+  "generator-yeo": {
+    "project": "test_site",
+    "description": "An Amiculum Digital prototype project",
+    "author": "Author's Name",
+    "jsPreprocessor": "ES6(using babel)",
+    "tailwindCSS": "1.9.6"
+  }
+}
