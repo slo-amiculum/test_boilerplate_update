@@ -109,15 +109,30 @@ function generateHtmlPlugins (templateDir,envPath) {
 function generateModRules(envMode) {
   const devModRules = [
     {
+      // test: /\.js$/,
+      // exclude: /node_modules/,
+      // use: "happypack/loader?id=js"
       test: /\.js$/,
       exclude: /node_modules/,
-      use: "happypack/loader?id=js"
+      use: {
+        loader: 'babel-loader',
+        options: {
+          presets: ['@babel/preset-env'],
+        },
+      }
     },
     {
       test: /\.(sa|sc|c)ss$/,
       use: [
         MiniCssExtractPlugin.loader,
-        'css-loader',
+        // 'css-loader',
+        { 
+          loader: 'css-loader', 
+          options: { 
+            url: false,
+            esModule: true
+          } 
+        },
         'postcss-loader',
         // 'fast-sass-loader',
         {
@@ -129,8 +144,10 @@ function generateModRules(envMode) {
       ],
     },
     {
+      // test: /\.pug$/,
+      // use: "happypack/loader?id=html"
       test: /\.pug$/,
-      use: "happypack/loader?id=html"
+      use: ["pug-loader"]
     }
   ]
 
@@ -144,7 +161,13 @@ function generateModRules(envMode) {
       test: /\.(sa|sc|c)ss$/,
       use: [
         MiniCssExtractPlugin.loader,
-        'css-loader',
+        // 'css-loader',
+        { 
+          loader: 'css-loader', 
+          options: { 
+            url: false 
+          } 
+        },
         'postcss-loader',
         // 'fast-sass-loader',
         {
@@ -171,7 +194,13 @@ function generateModRules(envMode) {
       test: /\.(sa|sc|c)ss$/,
       use: [
         MiniCssExtractPlugin.loader,
-        'css-loader',
+        // 'css-loader',
+        { 
+          loader: 'css-loader', 
+          options: { 
+            url: false 
+          } 
+        },
         'postcss-loader',
         // 'fast-sass-loader',
         {
@@ -201,17 +230,17 @@ function generatePlugins (envMode) {
   const devPlugins = [
     new webpack.HotModuleReplacementPlugin(),
 
-    new HappyPack({
-      id: 'html',
-      loaders: ['pug-loader?pretty=true'],
-      threadPool: happyThreadPool
-    }),
+    // new HappyPack({
+    //   id: 'html',
+    //   loaders: ['pug-loader?pretty=true'],
+    //   threadPool: happyThreadPool
+    // }),
 
-    new HappyPack({
-      id: 'js',
-      loaders: ['babel-loader?cacheDirectory' ],
-      threadPool: happyThreadPool
-    }),
+    // new HappyPack({
+    //   id: 'js',
+    //   loaders: ['babel-loader?cacheDirectory' ],
+    //   threadPool: happyThreadPool
+    // }),
 
     new BrowserSyncPlugin(
       {
@@ -280,7 +309,7 @@ const buildPlugins = generatePlugins(runMod);
 const moduleRules = generateModRules(runMod);
 const distRules = generateDist(runMod);
 
-module.exports = smp.wrap({
+module.exports = {
   entry:  path.resolve(__dirname, 'index.js'),
   mode: process.env.NODE_ENV,
   output: {
@@ -293,11 +322,25 @@ module.exports = smp.wrap({
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new CopyWebpackPlugin([
-      {from:'src/_images',to:`${assetPath}/images`},
-      {from:'src/_fonts',to:`${assetPath}/fonts`},
-      {from:'**/*',ignore:['{**/\_*,**/\_*/**}','**/*.pug'],context: 'src/'}
-    ]),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: 'src/_images',
+          to: `${assetPath}/images`,
+        },
+        {
+          from: 'src/_fonts',
+          to: `${assetPath}/fonts`,
+        },
+        {
+          from: '**/*',
+          globOptions: {
+            ignore:['{**/\_*,**/\_*/**}','**/*.pug'],
+          },
+          context: 'src/',
+        }
+      ]
+    }),
 
     new webpack.ProvidePlugin({
       $: 'jquery',
@@ -335,6 +378,14 @@ module.exports = smp.wrap({
 
     }
   },
+  resolve: {
+    modules: [
+      "node_modules"
+    ],
+    alias: {
+
+    }
+  },
   optimization: {
     minimizer: [
       new UglifyJsPlugin({
@@ -343,4 +394,4 @@ module.exports = smp.wrap({
       }),
     ],
   },
-});
+};

@@ -1,0 +1,17 @@
+extends ../_layouts/base
+
+//- Sample Module import
+//- include ../_modules/atoms/module-name/module-name
+
+block config
+  //- Correct base url pathing for this page
+  - var baseUrl = '../'
+  - isHome = false
+  - var pageTitle = 'About Us'
+  - var page = 'about'
+  - var site = htmlWebpackPlugin.options //global site data
+  - var env = site.env
+  - var dir = site.directory
+
+block content
+  .yeo-info
