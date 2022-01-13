@@ -27,21 +27,18 @@ if (process.argv.indexOf('development') === -1) {
     runMod = 'staging';
     process.env.NODE_ENV = 'staging';
     console.log(process.argv);
-    console.log('Running staging build......');
-    console.log('Assets will be created at ', assetPath);
+    console.log('Running Dev-Server build......');
   } else {
     runMod = 'production';
     process.env.NODE_ENV = 'production';
     console.log(process.argv);
-    console.log('Running production build......');
-    console.log('Assets will be created at ', assetPath);
+    console.log('Running Production build......');
   }
 } else {
   runMod = 'development';
   process.env.NODE_ENV = 'development';
   console.log(process.argv);
-  console.log('Running development build......');
-  console.log('Assets will be created at ', assetPath);
+  console.log('Running Local build......');
 }
 
 function loadJsonFiles(startPath, parentObj) {
@@ -109,9 +106,6 @@ function generateHtmlPlugins (templateDir,envPath) {
 function generateModRules(envMode) {
   const devModRules = [
     {
-      // test: /\.js$/,
-      // exclude: /node_modules/,
-      // use: "happypack/loader?id=js"
       test: /\.js$/,
       exclude: /node_modules/,
       use: {
@@ -125,7 +119,6 @@ function generateModRules(envMode) {
       test: /\.(sa|sc|c)ss$/,
       use: [
         MiniCssExtractPlugin.loader,
-        // 'css-loader',
         { 
           loader: 'css-loader', 
           options: { 
@@ -134,7 +127,6 @@ function generateModRules(envMode) {
           } 
         },
         'postcss-loader',
-        // 'fast-sass-loader',
         {
           loader: "fast-sass-loader",
           options: {
@@ -144,8 +136,6 @@ function generateModRules(envMode) {
       ],
     },
     {
-      // test: /\.pug$/,
-      // use: "happypack/loader?id=html"
       test: /\.pug$/,
       use: ["pug-loader"]
     }
@@ -161,7 +151,6 @@ function generateModRules(envMode) {
       test: /\.(sa|sc|c)ss$/,
       use: [
         MiniCssExtractPlugin.loader,
-        // 'css-loader',
         { 
           loader: 'css-loader', 
           options: { 
@@ -169,7 +158,6 @@ function generateModRules(envMode) {
           } 
         },
         'postcss-loader',
-        // 'fast-sass-loader',
         {
           loader: "fast-sass-loader",
           options: {
@@ -194,7 +182,6 @@ function generateModRules(envMode) {
       test: /\.(sa|sc|c)ss$/,
       use: [
         MiniCssExtractPlugin.loader,
-        // 'css-loader',
         { 
           loader: 'css-loader', 
           options: { 
@@ -202,7 +189,6 @@ function generateModRules(envMode) {
           } 
         },
         'postcss-loader',
-        // 'fast-sass-loader',
         {
           loader: "fast-sass-loader",
           options: {
@@ -229,18 +215,6 @@ function generateModRules(envMode) {
 function generatePlugins (envMode) {
   const devPlugins = [
     new webpack.HotModuleReplacementPlugin(),
-
-    // new HappyPack({
-    //   id: 'html',
-    //   loaders: ['pug-loader?pretty=true'],
-    //   threadPool: happyThreadPool
-    // }),
-
-    // new HappyPack({
-    //   id: 'js',
-    //   loaders: ['babel-loader?cacheDirectory' ],
-    //   threadPool: happyThreadPool
-    // }),
 
     new BrowserSyncPlugin(
       {

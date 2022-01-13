@@ -6,8 +6,8 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"build": "webpack --mode production --config webpack.config.js",
-		"stage": "webpack --mode none --config webpack.config.js",
-		"dev": "webpack-dev-server --mode development --config webpack.config.js"
+		"dev": "webpack --mode none --config webpack.config.js",
+		"serve": "webpack-dev-server --mode development --config webpack.config.js"
 	},
 	"author": "Author&#39;s Name",
 	"license": "MIT",
